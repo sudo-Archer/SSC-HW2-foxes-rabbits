@@ -50,14 +50,14 @@ public class Fox extends Animal {
      * This is what the fox does most of the time: it hunts for rabbits. In the
      * process, it might breed, die of hunger, or die of old age.
      *
-     * @param field The field currently occupied.
-     * @param newFoxes A list to return newly born foxes.
+     * @param newAnimals A list to return newly born foxes.
      */
-    public void hunt(List<Fox> newFoxes) {
+    @Override
+    public void act(List<Animal> newAnimals) {
         incrementAge();
         incrementHunger();
         if (isAlive()) {
-            giveBirth(newFoxes);
+            giveBirth(newAnimals);
             // Move towards a source of food if found.
             Location newLocation = findFood();
             if (newLocation == null) {
