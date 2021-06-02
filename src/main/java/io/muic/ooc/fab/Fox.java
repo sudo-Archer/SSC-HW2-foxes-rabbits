@@ -33,17 +33,8 @@ public class Fox extends Animal {
      * @param location The location within the field.
      */
     public Fox(boolean randomAge, Field field, Location location) {
-        age = 0;
-        setAlive(true);
-        this.field = field;
-        setLocation(location);
-        if (randomAge) {
-            age = RANDOM.nextInt(MAX_AGE);
-            foodLevel = RANDOM.nextInt(RABBIT_FOOD_VALUE);
-        } else {
-            // leave age at 0
-            foodLevel = RANDOM.nextInt(RABBIT_FOOD_VALUE);
-        }
+        super(randomAge, field, location);
+        foodLevel = RANDOM.nextInt(RABBIT_FOOD_VALUE);
     }
 
     /**

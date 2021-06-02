@@ -17,6 +17,15 @@ public abstract class Animal {
 
     private static final Random RANDOM = new Random();
 
+    public Animal(boolean randomAge, Field field, Location location) {
+        this.field = field;
+        age = 0;
+        setAlive(true);
+        setLocation(location);
+        if (randomAge) {
+            age = RANDOM.nextInt(getMaxAge());
+        }
+    }
 
     /**
      * Check whether the animal is alive or not.
