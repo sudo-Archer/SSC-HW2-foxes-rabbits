@@ -127,23 +127,8 @@ public class Simulator {
     /**
      * Randomly populate the field with foxes and rabbits.
      */
-    private void populate() {
-        
-        field.clear();
-        for (int row = 0; row < field.getDepth(); row++) {
-            for (int col = 0; col < field.getWidth(); col++) {
-                if (RANDOM.nextDouble() <= FOX_CREATION_PROBABILITY) {
-                    Location location = new Location(row, col);
-                    Animal animal = AnimalFactory.createAnimal(AnimalType.FOX, field, location);
-                    animals.add(animal);
-                } else if (RANDOM.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
-                    Location location = new Location(row, col);
-                    Animal animal = AnimalFactory.createAnimal(AnimalType.RABBIT, field, location);
-                    animals.add(animal);
-                }
-                // else leave the location empty.
-            }
-        }
+    public void populate() {
+        new FieldPopulator().populate(field, animals);
     }
 
     /**
