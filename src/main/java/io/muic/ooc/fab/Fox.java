@@ -32,8 +32,9 @@ public class Fox extends Animal {
      * @param field The field currently occupied.
      * @param location The location within the field.
      */
-    public Fox(boolean randomAge, Field field, Location location) {
-        super(randomAge, field, location);
+    @Override
+    public void initialize(boolean randomAge, Field field, Location location) {
+        super.initialize(randomAge, field, location);
         foodLevel = RANDOM.nextInt(RABBIT_FOOD_VALUE);
     }
 
@@ -101,11 +102,6 @@ public class Fox extends Animal {
     @Override
     protected int getBreedingAge() {
         return BREEDING_AGE;
-    }
-
-    @Override
-    protected Animal createYoung(boolean randomAge, Field field, Location location) {
-        return new Fox(randomAge, field, location);
     }
 
     @Override

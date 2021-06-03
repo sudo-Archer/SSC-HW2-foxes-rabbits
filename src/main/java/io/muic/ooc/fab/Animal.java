@@ -25,7 +25,7 @@ public abstract class Animal {
      * @param field The field currently occupied.
      * @param location The location within the field.
      */
-    public Animal(boolean randomAge, Field field, Location location) {
+    public void initialize(boolean randomAge, Field field, Location location) {
         this.field = field;
         age = 0;
         setAlive(true);
@@ -123,8 +123,6 @@ public abstract class Animal {
 
     protected abstract int getBreedingAge();
 
-    protected abstract Animal createYoung(boolean randomAge, Field field, Location location);
-
     /**
      * Check whether or not this rabbit is to give birth at this step. New
      * births will be made into free adjacent locations.
@@ -166,6 +164,8 @@ public abstract class Animal {
         }
     }
 
-
+    private Animal createYoung(boolean randomAge, Field field, Location location) {
+        return AnimalFactory.createAnimal(this.getClass(), field, location);
+    }
 
 }
