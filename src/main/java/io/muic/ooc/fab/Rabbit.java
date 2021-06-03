@@ -19,6 +19,10 @@ public class Rabbit extends Animal {
 
 
     @Override
+    protected void incrementHunger() {
+    }
+
+    @Override
     protected double getBreedingProbability() {
         return BREEDING_PROBABILITY;
     }
@@ -43,5 +47,25 @@ public class Rabbit extends Animal {
     @Override
     protected Location moveToNewLocation() {
         return field.freeAdjacentLocation(location);
+    }
+
+    @Override
+    protected boolean isEdible(Object animal) {
+        return false;
+    }
+
+    @Override
+    protected int getMaxFoodLevel() {
+        return 0;
+    }
+
+    @Override
+    protected int getFoodLevel() {
+        return 0;
+    }
+
+    @Override
+    protected void setFoodLevel(int n) {
+
     }
 }

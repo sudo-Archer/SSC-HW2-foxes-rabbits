@@ -1,7 +1,8 @@
 package io.muic.ooc.fab;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
+import static javax.swing.UIManager.put;
 
 public abstract class Animal {
 
@@ -17,6 +18,8 @@ public abstract class Animal {
 
     private static final Random RANDOM = new Random();
 
+    private static AnimalType[] animalTypes = AnimalType.values();
+    // Map Class to foodValue
     /**
      * Create a new Animal. an Animal may be created with age zero (a new born)
      * or with a random age.
@@ -109,6 +112,7 @@ public abstract class Animal {
         return births;
     }
 
+
     protected abstract double getBreedingProbability();
     protected abstract int getMaxLitterSize();
 
@@ -141,7 +145,44 @@ public abstract class Animal {
         }
     }
 
-    protected abstract Location moveToNewLocation();
+    protected Location moveToNewLocation() {
+        Location newLocation = findFood();
+        if (newLocation == null) {
+            // No food found - try to move to a free location.
+            newLocation = field.freeAdjacentLocation(location);
+        }
+        return newLocation;
+    }
+    private Location findFood() {
+        List<Location> adjacent = field.adjacentLocations(location);
+        Iterator<Location> it = adjacent.iterator();
+        while (it.hasNext()) {
+            Location where = it.next();
+            Object animal = field.getObjectAt(where);
+            if (isEdible(animal)) {
+                Animal prey  = (Animal) animal;
+                if (prey.isAlive()) {
+                    prey.setDead();
+                    eat(prey);
+                    return where;
+                }
+            }
+        }
+        return null;
+    }
+    protected abstract boolean isEdible(Object animal);
+    protected abstract int getMaxFoodLevel();
+
+    private void eat(Animal animal){
+        for(int i=0; i<animalTypes.length; i++){
+            if (animalTypes[i].getAnimalClass().isInstance(animal)){
+                setFoodLevel(getFoodLevel() + animalTypes[i].getFoodValue());
+            }
+        }
+        if (getFoodLevel() > getMaxFoodLevel()){
+            setFoodLevel(getMaxFoodLevel());
+        }
+    }
 
     /**
      * This is what the Animal does most of the time - it runs around. Sometimes
@@ -150,6 +191,7 @@ public abstract class Animal {
      * @param newAnimals A list to return newly born Animals.
      */
     public void act(List<Animal> newAnimals) {
+        incrementHunger();
         incrementAge();
         if (isAlive()) {
             giveBirth(newAnimals);
@@ -163,6 +205,16 @@ public abstract class Animal {
             }
         }
     }
+
+    protected void incrementHunger() {
+        setFoodLevel( getFoodLevel()-1 );
+        if (getFoodLevel()<= 0) {
+            setDead();
+        }
+    }
+
+    protected abstract int getFoodLevel();
+    protected abstract void setFoodLevel(int n);
 
     private Animal createYoung(boolean randomAge, Field field, Location location) {
         return AnimalFactory.createAnimal(this.getClass(), field, location);

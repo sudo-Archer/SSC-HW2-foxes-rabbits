@@ -1,11 +1,9 @@
 package io.muic.ooc.fab;
 
-import java.time.Instant;
-import java.util.*;
+import java.util.List;
+import java.util.Random;
 
-import static javax.swing.UIManager.put;
-
-public class Tiger extends Animal {
+public class Hunter extends Animal {
     // Characteristics shared by all foxes (class variables).
 
     // The age at which a fox can start to breed.
@@ -13,7 +11,7 @@ public class Tiger extends Animal {
     // The age to which a fox can live.
     private static final int MAX_AGE = 200;
     // The likelihood of a fox breeding.
-    private static final double BREEDING_PROBABILITY = 0.04;
+    private static final double BREEDING_PROBABILITY = 0.00;
     // The maximum number of births.
     private static final int MAX_LITTER_SIZE = 2;
     // The food value of a single rabbit. In effect, this is the
@@ -21,13 +19,11 @@ public class Tiger extends Animal {
     private static final int RABBIT_FOOD_VALUE = AnimalType.RABBIT.getFoodValue();
     // Random generator
     private static final Random RANDOM = new Random();
-    // AnimalTypes what it can eat
-    private static final Class[] EDIBLE = {Fox.class, Rabbit.class};
 
     // The fox's food level, which is increased by eating rabbits.
     private int foodLevel;
 
-    private final int MAX_FOOD_LEVEL = 10;
+    private final int MAX_FOOD_LEVEL = 20;
 
     /**
      * Create a fox. A fox can be created as a new born (age zero and not
@@ -42,7 +38,10 @@ public class Tiger extends Animal {
         super.initialize(randomAge, field, location);
         foodLevel = RANDOM.nextInt(MAX_FOOD_LEVEL);
     }
+    @Override
+    protected void setDead() {
 
+    }
 
     @Override
     public int getMaxAge() {
@@ -66,12 +65,10 @@ public class Tiger extends Animal {
 
     @Override
     protected boolean isEdible(Object animal) {
-        for(int i=0; i<EDIBLE.length; i++){
-            if (EDIBLE[i].isInstance(animal)){
-                return true;
+            if (Hunter.class.isInstance(animal) || animal == null){
+                return false;
             }
-        }
-        return false;
+            return true;
     }
 
     @Override

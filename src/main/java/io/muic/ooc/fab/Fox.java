@@ -1,8 +1,9 @@
 package io.muic.ooc.fab;
 
-import java.util.List;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class Fox extends Animal {
     // Characteristics shared by all foxes (class variables).
@@ -17,12 +18,16 @@ public class Fox extends Animal {
     private static final int MAX_LITTER_SIZE = 2;
     // The food value of a single rabbit. In effect, this is the
     // number of steps a fox can go before it has to eat again.
-    private static final int RABBIT_FOOD_VALUE = 9;
+    private static final int RABBIT_FOOD_VALUE = AnimalType.RABBIT.getFoodValue();
     // Random generator
     private static final Random RANDOM = new Random();
+    // AnimalTypes what it can eat
+    private static final Class[] EDIBLE = {Rabbit.class};
 
     // The fox's food level, which is increased by eating rabbits.
     private int foodLevel;
+
+    private final int MAX_FOOD_LEVEL = 10;
 
     /**
      * Create a fox. A fox can be created as a new born (age zero and not
@@ -35,7 +40,7 @@ public class Fox extends Animal {
     @Override
     public void initialize(boolean randomAge, Field field, Location location) {
         super.initialize(randomAge, field, location);
-        foodLevel = RANDOM.nextInt(RABBIT_FOOD_VALUE);
+        foodLevel = RANDOM.nextInt(MAX_FOOD_LEVEL);
     }
 
     /**
@@ -44,21 +49,11 @@ public class Fox extends Animal {
      *
      * @param newAnimals A list to return newly born foxes.
      */
-    @Override
-    public void act(List<Animal> newAnimals) {
-        incrementHunger();
-        super.act(newAnimals);
-    }
 
     /**
      * Make this fox more hungry. This could result in the fox's death.
      */
-    private void incrementHunger() {
-        foodLevel--;
-        if (foodLevel <= 0) {
-            setDead();
-        }
-    }
+
 
     /**
      * Look for rabbits adjacent to the current location. Only the first live
@@ -66,23 +61,12 @@ public class Fox extends Animal {
      *
      * @return Where food was found, or null if it wasn't.
      */
-    private Location findFood() {
-        List<Location> adjacent = field.adjacentLocations(location);
-        Iterator<Location> it = adjacent.iterator();
-        while (it.hasNext()) {
-            Location where = it.next();
-            Object animal = field.getObjectAt(where);
-            if (animal instanceof Rabbit) {
-                Rabbit rabbit = (Rabbit) animal;
-                if (rabbit.isAlive()) {
-                    rabbit.setDead();
-                    foodLevel = RABBIT_FOOD_VALUE;
-                    return where;
-                }
-            }
-        }
-        return null;
-    }
+
+
+
+
+
+
 
     @Override
     public int getMaxAge() {
@@ -104,13 +88,28 @@ public class Fox extends Animal {
         return BREEDING_AGE;
     }
 
+
     @Override
-    protected Location moveToNewLocation() {
-        Location newLocation = findFood();
-        if (newLocation == null) {
-            // No food found - try to move to a free location.
-            newLocation = field.freeAdjacentLocation(location);
+    protected boolean isEdible(Object animal) {
+        for(int i=0; i<EDIBLE.length; i++){
+            if (EDIBLE[i].isInstance(animal)){
+                return true;
+            }
         }
-        return newLocation;
+        return false;
+    }
+    @Override
+    protected int getMaxFoodLevel() {
+        return MAX_FOOD_LEVEL;
+    }
+
+    @Override
+    protected int getFoodLevel() {
+        return foodLevel;
+    }
+
+    @Override
+    protected void setFoodLevel(int n) {
+        foodLevel = n;
     }
 }
