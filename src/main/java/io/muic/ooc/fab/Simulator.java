@@ -1,7 +1,10 @@
 package io.muic.ooc.fab;
 
 
+import io.muic.ooc.fab.view.Observable;
+import io.muic.ooc.fab.view.Observer;
 import io.muic.ooc.fab.view.SimulatorView;
+import io.muic.ooc.fab.view.SimulatorViewObserver;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.awt.Color;
 
-public class Simulator {
+public class Simulator extends Observable {
 
     // Constants representing configuration information for the simulation.
     // The default width for the grid.
@@ -57,6 +60,7 @@ public class Simulator {
 
         // Create a view of the state of each location in the field.
         view = new SimulatorView(depth, width);
+        addObserver(new SimulatorViewObserver(view));
         AnimalType[] animalTypes = AnimalType.values();
         for (int i=0; i< animalTypes.length; i++){
             view.setColor(animalTypes[i].getAnimalClass(), animalTypes[i].getColor());
@@ -107,7 +111,7 @@ public class Simulator {
         // Add the newly born foxes and rabbits to the main lists.
         animals.addAll(newAnimals);
 
-        view.showStatus(step, field);
+        notifyAllObservers(step, field);
     }
 
     /**

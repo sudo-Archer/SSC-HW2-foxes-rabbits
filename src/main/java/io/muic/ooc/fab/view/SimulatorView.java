@@ -17,7 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class SimulatorView extends JFrame {
+public class SimulatorView extends JFrame{
 
     // Colors used for empty locations.
     private static final Color EMPTY_COLOR = Color.white;

@@ -2,11 +2,11 @@ package io.muic.ooc.fab.view;
 
 import io.muic.ooc.fab.Field;
 
-public class SimulateViewObserver extends Observer {
+public class SimulatorViewObserver extends Observer {
 
     private SimulatorView view;
 
-    public SimulateViewObserver(SimulatorView view) {
+    public SimulatorViewObserver(SimulatorView view) {
         this.view = view;
     }
 
